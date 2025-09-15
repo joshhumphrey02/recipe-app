@@ -4,17 +4,17 @@ import { Product } from "../product";
 
 interface ProductsProps {
   products: Product[];
-  cusine?: string;
+  category?: string;
 }
 
-export function Products({ products, cusine }: ProductsProps) {
+export function Products({ products, category }: ProductsProps) {
   const data = useMemo(() => {
-    if (cusine) {
-      return products.filter((p) => p.cuisine == cusine);
+    if (category) {
+      return products.filter((p) => p.category == category);
     } else {
       return products;
     }
-  }, [products, cusine]);
+  }, [products, category]);
   return (
     <div className=" grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
       {data?.map((p, i) => (

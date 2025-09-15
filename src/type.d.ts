@@ -1,16 +1,20 @@
 interface Product {
   id: string;
-  name: string;
-  ingredients: string[];
-  instructions: string[];
-  prepTimeMinutes: number;
-  cookTimeMinutes: number;
-  difficulty: "Easy" | "Hard";
-  cuisine: string;
+  title: string;
+  description: string;
+  category: string;
+  price: number;
+  discountPercentage: number;
+  stock: number;
   tags: string[];
-  userId: string;
-  image: string;
+  brand: string;
+  images: string[];
   rating: number;
-  reviewCount: number;
-  mealType: string[];
+  rewiews: {
+    rating: number;
+    comment: string;
+    date: string;
+    reviewerName: string;
+    reviewerEmail: string;
+  }[];
 }

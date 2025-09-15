@@ -1,26 +1,41 @@
+import { formatMoney } from "@/lib/utils";
 import { Avatar, AvatarFallback } from "../ui/avatar";
 import { Card } from "../ui/card";
+import { Heart } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 interface Props {
   data: Product;
 }
 
 export function Product({ data }: Props) {
+  const router = useRouter();
   return (
     <Card
-      style={{ backgroundImage: `url(${data.image})` }}
-      className=" h-60 bg-cover text-white bg-center bg-no-repeat flex p-0"
+      onClick={() => {
+        router.push(`/p/${data.id}`);
+      }}
+      style={{ backgroundImage: `url(${data.images[0]})` }}
+      className=" h-60 bg-cover text-white bg-center rounded-xl bg-no-repeat flex p-0"
     >
-      <div className="bg-black/40 flex-1 flex flex-col justify-end p-4">
-        <h4 className="text-xl font-medium">{data.name}</h4>
-        <div className="flex gap-2 items-center">
-          <Avatar>
-            <AvatarFallback className="text-black">JH</AvatarFallback>
-          </Avatar>
-          <div className="flex flex-col">
-            <h5 className="text-sm font-medium">Humphrey Joshua</h5>
-            <p className="text-xs font-light">Lorem ipsum dolor sit amet.</p>
+      <div className="bg-black/40 relative flex-1 rounded-xl flex flex-col justify-end p-4">
+        <div className=" flex justify-between">
+          <h4 className="text-xl font-medium">{data.title}</h4>
+          <div className=" absolute top-2 right-2 p-2 bg-gray-500 rounded-full">
+            <Heart />
           </div>
+        </div>
+        <div className="flex gap-2 items-center">
+          <h2 className="text-md font-bold">
+            {formatMoney(data.price, "NGN", 0)}
+          </h2>
+          <h2 className="text-xs line-through">
+            {formatMoney(
+              data.price - (data.price * data.discountPercentage) / 100,
+              "NGN",
+              0
+            )}
+          </h2>
         </div>
       </div>
     </Card>
