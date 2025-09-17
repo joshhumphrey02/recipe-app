@@ -10,7 +10,7 @@ interface Product {
   brand: string;
   images: string[];
   rating: number;
-  rewiews: {
+  reviews: {
     rating: number;
     comment: string;
     date: string;

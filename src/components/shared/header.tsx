@@ -1,5 +1,6 @@
 import { Bookmark, Search, ShoppingCart } from "lucide-react";
 import { Input } from "../ui/input";
+import { Toggle } from "../theme/toggle";
 
 export function Header() {
   return (
@@ -21,6 +22,7 @@ export function Header() {
             <Search className="w-4 h-4 md:w-7 md:h-7" />
           </span>
         </div>
+        <Toggle />
         <span className=" p-2 rounded-full border border-border">
           <ShoppingCart className="w-4 h-4 md:w-7 md:h-7" />
         </span>
