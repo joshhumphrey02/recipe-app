@@ -18,3 +18,11 @@ interface Product {
     reviewerEmail: string;
   }[];
 }
+
+interface FilterItemsProps {
+  name?: string;
+  category?: string;
+  sort?: string;
+  minPrice?: number;
+  maxPrice?: number;
+}

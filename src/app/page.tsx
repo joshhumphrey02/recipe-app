@@ -5,13 +5,11 @@ import { Badge } from "@/components/ui/badge";
 import { Products } from "@/components/home/products";
 
 interface HomeProps {
-  searchParams: Promise<{
-    category?: string;
-  }>;
+  searchParams: Promise<FilterItemsProps>;
 }
 
 export default async function Home({ searchParams }: HomeProps) {
-  const { category } = await searchParams;
+  const params = await searchParams;
   const res = await fetch("https://dummyjson.com/products?limit=30");
   const data = await res.json();
   const products = (data?.products || []) as unknown as Product[];
@@ -19,8 +17,8 @@ export default async function Home({ searchParams }: HomeProps) {
     <div className="flex flex-col gap-4">
       <Hero />
       <section className="flex flex-col gap-6 px-4 py-6 md:px-6">
-        <Filter data={products} category={category} />
-        <Products products={products} category={category} />
+        <Filter data={products} params={params} />
+        <Products products={products} params={params} />
       </section>
     </div>
   );

@@ -22,18 +22,19 @@ import {
 } from "@/components/ui/drawer";
 import { useMemo } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { FilterDrawer } from "./filter-drawer";
 
 interface FilterProps {
   data: Product[];
-  category?: string;
+  params: FilterItemsProps;
 }
 
-export function Filter({ data, category }: FilterProps) {
+export function Filter({ data, params }: FilterProps) {
   const pills = ["Food", "Meal", "category", "Fries"];
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const { replace } = useRouter();
-  const categorys = useMemo(() => {
+  const categories = useMemo(() => {
     const newD: string[] = [];
     data?.forEach((d) => {
       if (!newD.includes(d.category)) newD.push(d.category);
@@ -55,14 +56,14 @@ export function Filter({ data, category }: FilterProps) {
         ))}
       </div>
       <div className="w-full md:w-fit justify-between flex gap-4 items-center">
-        <Select value={category} onValueChange={handleSelect}>
+        <Select value={params?.category} onValueChange={handleSelect}>
           <SelectTrigger className="w-[180px]">
             <SelectValue placeholder="Select a category" />
           </SelectTrigger>
           <SelectContent>
             <SelectGroup>
               <SelectLabel>Caegories</SelectLabel>
-              {categorys?.map((c) => (
+              {categories?.map((c) => (
                 <SelectItem key={c} value={c}>
                   {c}
                 </SelectItem>
@@ -70,33 +71,8 @@ export function Filter({ data, category }: FilterProps) {
             </SelectGroup>
           </SelectContent>
         </Select>
-        <FilterDrawer />
+        <FilterDrawer params={params} categories={categories} />
       </div>
     </div>
-  );
-}
-
-export function FilterDrawer() {
-  return (
-    <Drawer direction="right">
-      <DrawerTrigger asChild>
-        <Button variant="outline">Filter</Button>
-      </DrawerTrigger>
-      <DrawerContent>
-        <div className="mx-auto w-full max-w-sm md:max-w-md">
-          <DrawerHeader>
-            <DrawerTitle>Move Goal</DrawerTitle>
-            <DrawerDescription>Set your daily activity goal.</DrawerDescription>
-          </DrawerHeader>
-          <div className="p-4 pb-0"></div>
-          <DrawerFooter>
-            <Button>Submit</Button>
-            <DrawerClose asChild>
-              <Button variant="outline">Cancel</Button>
-            </DrawerClose>
-          </DrawerFooter>
-        </div>
-      </DrawerContent>
-    </Drawer>
   );
 }

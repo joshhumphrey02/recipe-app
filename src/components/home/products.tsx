@@ -4,13 +4,18 @@ import { Product } from "../product";
 
 interface ProductsProps {
   products: Product[];
-  category?: string;
+  params: FilterItemsProps;
 }
 
-export function Products({ products, category }: ProductsProps) {
+export function Products({ products, params }: ProductsProps) {
+  const { name, category, sort, maxPrice, minPrice } = params;
   const data = useMemo(() => {
     if (category) {
       return products.filter((p) => p.category == category);
+    }
+    if (name) {
+      const reg = new RegExp(name, "ig");
+      return products.filter((p) => reg.test(p.title));
     } else {
       return products;
     }
