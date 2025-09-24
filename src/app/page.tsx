@@ -3,6 +3,7 @@ import { Filter } from "@/components/home/filter";
 import { Product } from "@/components/product";
 import { Badge } from "@/components/ui/badge";
 import { Products } from "@/components/home/products";
+import { getProducts } from "@/actions/product";
 
 interface HomeProps {
   searchParams: Promise<FilterItemsProps>;
@@ -10,9 +11,7 @@ interface HomeProps {
 
 export default async function Home({ searchParams }: HomeProps) {
   const params = await searchParams;
-  const res = await fetch("https://dummyjson.com/products?limit=30");
-  const data = await res.json();
-  const products = (data?.products || []) as unknown as Product[];
+  const products = await getProducts();
   return (
     <div className="flex flex-col gap-4">
       <Hero />

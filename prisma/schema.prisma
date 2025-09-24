@@ -21,48 +21,18 @@ model User {
 
 model Product {
   id                 String   @id @default(uuid())
-  title              String
-  description        String
-  price              Int
-  discountPercentage Int?
-  stock              Int
+  name               String
+  ingredients        String[]
+  instructions       String[]
+  mealType           String[]
+  prepTimeMinutes    Int?
+  cookTimeMinutes    Int?
+  servings           Int
+  reviewCount        Int
+  caloriesPerServing Int
   tags               String[]
-  rating             Int
-  categoryId         String?
-  brandId            String?
-
-  images   Image[]
-  category Category? @relation(fields: [categoryId], references: [id], onDelete: Cascade)
-  brand    Brand?    @relation(fields: [brandId], references: [id], onDelete: NoAction)
-  reviews  Review[]
-}
-
-model Image {
-  id        String  @id @default(uuid())
-  url       String  @unique
-  productId String?
-
-  product Product? @relation(fields: [productId], references: [id], onDelete: Cascade)
-}
-
-model Review {
-  id        String   @id @default(uuid())
-  rating    Int
-  comment   String?
-  createdAt DateTime @default(now())
-  productId String
-
-  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
-}
-
-model Category {
-  id       String    @id @default(uuid())
-  name     String    @unique
-  products Product[]
-}
-
-model Brand {
-  id       String    @id @default(uuid())
-  name     String    @unique
-  products Product[]
+  rating             Float
+  difficulty         String
+  cuisine            String
+  image              String
 }

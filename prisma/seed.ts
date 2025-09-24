@@ -1,62 +1,27 @@
 import prisma from "@/lib/prisma";
 
 async function products() {
-  const res = await fetch("https://dummyjson.com/products?limit=40");
+  const res = await fetch("https://dummyjson.com/recipes?limit=40");
   const data = await res.json();
-  const products = (data?.products || []) as unknown as Product[];
+  const products = (data?.recipes || []) as unknown as Product[];
 
   products.forEach(async (p) => {
-    let category = await prisma.category.upsert({
-      where: {
-        name: p.category,
-      },
-      update: {
-        name: p.category,
-      },
-      create: {
-        name: p.category,
-      },
-    });
-    const brand = await prisma.brand.upsert({
-      where: {
-        name: p.brand,
-      },
-      update: {
-        name: p.brand,
-      },
-      create: {
-        name: p.brand,
-      },
-    });
     await prisma.product.create({
       data: {
-        title: p.title,
-        description: p.description,
-        price: p.price,
-        discountPercentage: p.discountPercentage,
-        stock: p.stock,
+        name: p.name,
+        ingredients: p.ingredients,
+        instructions: p.instructions,
+        mealType: p.mealType,
+        prepTimeMinutes: p.prepTimeMinutes,
+        cookTimeMinutes: p.cookTimeMinutes,
         tags: p.tags,
         rating: p.rating,
-        category: {
-          connect: {
-            id: category.id,
-          },
-        },
-        brand: {
-          connect: {
-            id: brand.id,
-          },
-        },
-        images: {
-          connectOrCreate: {
-            where: {
-              url: p.images[0],
-            },
-            create: {
-              url: p.images[0],
-            },
-          },
-        },
+        servings: p.servings,
+        reviewCount: p.reviewCount,
+        caloriesPerServing: p.caloriesPerServing,
+        difficulty: p.difficulty,
+        cuisine: p.cuisine,
+        image: p.image,
       },
     });
   });

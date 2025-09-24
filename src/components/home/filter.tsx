@@ -23,27 +23,28 @@ import {
 import { useMemo } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { FilterDrawer } from "./filter-drawer";
+import { Products } from "@/actions/product";
 
 interface FilterProps {
-  data: Product[];
+  data: Products;
   params: FilterItemsProps;
 }
 
 export function Filter({ data, params }: FilterProps) {
-  const pills = ["Food", "Meal", "category", "Fries"];
+  const pills = ["Food", "Meal", "cuisine", "Fries"];
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const { replace } = useRouter();
   const categories = useMemo(() => {
     const newD: string[] = [];
     data?.forEach((d) => {
-      if (!newD.includes(d.category)) newD.push(d.category);
+      if (!newD.includes(d.cuisine)) newD.push(d.cuisine);
     });
     return newD;
   }, [data]);
   function handleSelect(c: string) {
     const params = new URLSearchParams(searchParams);
-    params.set("category", c);
+    params.set("cuisine", c);
     replace(`${pathname}?${params.toString()}`);
   }
   return (
@@ -56,9 +57,9 @@ export function Filter({ data, params }: FilterProps) {
         ))}
       </div>
       <div className="w-full md:w-fit justify-between flex gap-4 items-center">
-        <Select value={params?.category} onValueChange={handleSelect}>
+        <Select value={params?.cuisine} onValueChange={handleSelect}>
           <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Select a category" />
+            <SelectValue placeholder="Select a cuisine" />
           </SelectTrigger>
           <SelectContent>
             <SelectGroup>
