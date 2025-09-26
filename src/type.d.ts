@@ -17,9 +17,9 @@ interface Product {
 }
 
 interface FilterItemsProps {
-  name?: string;
-  cuisine?: string;
-  sort?: string;
-  minPrice?: number;
-  maxPrice?: number;
+  meal?: string[];
+  cuisine?: string[];
+  level?: string[];
+  prepRange?: number[];
+  cookRange?: number[];
 }

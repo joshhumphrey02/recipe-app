@@ -1,24 +1,19 @@
+import { getHomeProducts } from "@/actions/home";
+import { Explore } from "@/components/home/explore";
+import { Featured } from "@/components/home/featured";
 import { Hero } from "@/components/home/hero";
-import { Filter } from "@/components/home/filter";
-import { Product } from "@/components/product";
-import { Badge } from "@/components/ui/badge";
-import { Products } from "@/components/home/products";
-import { getProducts } from "@/actions/product";
+import { Trending } from "@/components/home/trending";
+import Footer from "@/components/shared/footer";
 
-interface HomeProps {
-  searchParams: Promise<FilterItemsProps>;
-}
-
-export default async function Home({ searchParams }: HomeProps) {
-  const params = await searchParams;
-  const products = await getProducts();
+export default async function Home() {
+  const data = await getHomeProducts();
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-8 md:gap-16 pb-16 mx-auto max-w-[1500px]">
       <Hero />
-      <section className="flex flex-col gap-6 px-4 py-6 md:px-6">
-        <Filter data={products} params={params} />
-        <Products products={products} params={params} />
-      </section>
+      <Trending trending={data.trending} />
+      <Featured featured={data.featured} />
+      <Explore />
+      <Footer />
     </div>
   );
 }

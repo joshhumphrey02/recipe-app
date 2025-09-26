@@ -1,5 +1,5 @@
-import { formatMoney } from "@/lib/utils";
-import { Avatar, AvatarFallback } from "../ui/avatar";
+"use client";
+import { cn } from "@/lib/utils";
 import { Card } from "../ui/card";
 import { Heart } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -7,17 +7,21 @@ import { Products } from "@/actions/product";
 
 interface Props {
   data: Products[0];
+  className?: string;
 }
 
-export function Product({ data }: Props) {
+export function Product({ data, className }: Props) {
   const router = useRouter();
   return (
     <Card
       onClick={() => {
-        router.push(`/p/${data.id}`);
+        router.push(`/recipies/${data.id}`);
       }}
       style={{ backgroundImage: `url(${data.image})` }}
-      className=" h-60 bg-cover text-white bg-center rounded-xl bg-no-repeat flex p-0"
+      className={cn(
+        " h-60 bg-cover min-w-20 text-white bg-center rounded-xl bg-no-repeat flex p-0",
+        className
+      )}
     >
       <div className="bg-black/40 relative flex-1 rounded-xl flex flex-col justify-end p-4">
         <div className=" flex justify-between">
