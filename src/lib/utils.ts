@@ -40,6 +40,7 @@ export function normalizeFilters(
 
   return {
     cuisine: normalizeArray(params.cuisine),
+    search: normalizeArray(params.search),
     meal: normalizeArray(params.meal),
     level: normalizeArray(params.level),
     prepRange: normalizeNumberArray(params.prepRange),

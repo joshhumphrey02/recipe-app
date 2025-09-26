@@ -1,6 +1,7 @@
 import { Bookmark, Search } from "lucide-react";
 import { Toggle } from "../theme/toggle";
 import Link from "next/link";
+import { SearchHeader } from "./search";
 
 export function Header() {
   return (
@@ -17,17 +18,8 @@ export function Header() {
           className=" w-full h-full object-cover"
         />
       </div> */}
+      <SearchHeader />
       <div className="flex gap-4 items-center">
-        <div className="flex gap-2 items-center border-2 shadow backdrop-blur-sm border-border rounded-full py-2 px-4">
-          <span>
-            <Search className="w-4 h-4" />
-          </span>
-          <input
-            className="flex-1 focus-visible:outline-none"
-            type="search"
-            placeholder="Search"
-          />
-        </div>
         <Toggle />
         <span className=" p-3 rounded-full border border-border">
           <Bookmark className="w-4 h-4 " />

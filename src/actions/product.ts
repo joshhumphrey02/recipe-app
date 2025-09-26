@@ -4,20 +4,27 @@ import prisma from "@/lib/prisma";
 
 export async function getProducts(filters: FilterItemsProps = {}) {
   try {
-    const { meal, cuisine, level, prepRange, cookRange } = filters;
-
+    const { meal, cuisine, level, prepRange, cookRange, search } = filters;
     const products = await prisma.product.findMany({
       where: {
+        ...(search?.length
+          ? {
+              name: {
+                contains: search[0],
+                mode: "insensitive",
+              },
+            }
+          : {}),
         ...(meal?.length
           ? {
               mealType: {
-                hasSome: meal, // works with string[]
+                hasSome: meal,
               },
             }
           : {}),
         ...(cuisine?.length
           ? {
-              cuisine: { in: cuisine }, // works with string
+              cuisine: { in: cuisine },
             }
           : {}),
         ...(level?.length

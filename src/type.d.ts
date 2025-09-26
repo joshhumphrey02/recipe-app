@@ -22,4 +22,5 @@ interface FilterItemsProps {
   level?: string[];
   prepRange?: number[];
   cookRange?: number[];
+  search?: string[];
 }

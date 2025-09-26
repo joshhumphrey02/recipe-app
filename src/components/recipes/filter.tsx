@@ -17,12 +17,13 @@ interface FilterProps {
 
 export function Filter({ filterDataPromise, params }: FilterProps) {
   const { cookRange, prepRange, cuisines, mealTypes } = use(filterDataPromise);
+  const [filter, setFilter] = useState<FilterItemsProps>({});
   const [filtering, setfiltering] = useState(false);
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const { replace } = useRouter();
 
-  function updateFilter(filter: FilterItemsProps) {
+  function updateURL(filter: FilterItemsProps) {
     setfiltering(true);
     const params = new URLSearchParams(searchParams);
 
@@ -45,6 +46,11 @@ export function Filter({ filterDataPromise, params }: FilterProps) {
       params.set("level", safeJoin(filter.level)!);
     } else {
       params.delete("level");
+    }
+    if (safeJoin(filter.search)) {
+      params.set("search", safeJoin(filter.search)!);
+    } else {
+      params.delete("search");
     }
 
     if (Array.isArray(filter.prepRange) && filter.prepRange.length === 2) {
@@ -86,20 +92,21 @@ export function Filter({ filterDataPromise, params }: FilterProps) {
       .map((s) => Number(s.trim()))
       .filter((n) => !Number.isNaN(n));
   }
-  const filter = useMemo(
-    () => ({
-      cuisine: ensureArray(params.cuisine),
-      meal: ensureArray(params.meal),
-      level: ensureArray(params.level),
-      prepRange: parseRange(params.prepRange),
-      cookRange: parseRange(params.cookRange),
-    }),
-    [params]
-  ) as FilterItemsProps;
   useEffect(() => {
     if (params && !filtering) {
-      updateFilter({
+      updateURL({
+        ...params,
         cuisine: ensureArray(params.cuisine),
+        search: ensureArray(params.search),
+        meal: ensureArray(params.meal),
+        level: ensureArray(params.level),
+        prepRange: parseRange(params.prepRange),
+        cookRange: parseRange(params.cookRange),
+      });
+      setFilter({
+        ...params,
+        cuisine: ensureArray(params.cuisine),
+        search: ensureArray(params.search),
         meal: ensureArray(params.meal),
         level: ensureArray(params.level),
         prepRange: parseRange(params.prepRange),
@@ -137,7 +144,10 @@ export function Filter({ filterDataPromise, params }: FilterProps) {
                     const next = checked
                       ? [...prev, c]
                       : prev?.filter((v) => v !== c);
-                    updateFilter({ ...filter, cuisine: next });
+                    setFilter((old) => {
+                      updateURL({ ...old, cuisine: next });
+                      return { ...old, cuisine: next };
+                    });
                   }}
                   id={c}
                 />
@@ -174,7 +184,10 @@ export function Filter({ filterDataPromise, params }: FilterProps) {
                     const next = checked
                       ? [...prev, m]
                       : prev?.filter((v) => v !== m);
-                    updateFilter({ ...filter, meal: next });
+                    setFilter((old) => {
+                      updateURL({ ...old, meal: next });
+                      return { ...old, meal: next };
+                    });
                   }}
                   id={m}
                 />
@@ -199,7 +212,10 @@ export function Filter({ filterDataPromise, params }: FilterProps) {
                   const next = checked
                     ? [...prev, lvl]
                     : prev?.filter((v) => v !== lvl);
-                  updateFilter({ ...filter, level: next });
+                  setFilter((old) => {
+                    updateURL({ ...old, level: next });
+                    return { ...old, level: next };
+                  });
                 }}
                 id={lvl}
               />
@@ -217,7 +233,12 @@ export function Filter({ filterDataPromise, params }: FilterProps) {
         min={prepRange[0]}
         max={prepRange[1]}
         range={filter.prepRange ?? prepRange}
-        setRange={(val) => updateFilter({ ...filter, prepRange: val })}
+        setRange={(val) =>
+          setFilter((old) => {
+            updateURL({ ...old, prepRange: val });
+            return { ...old, prepRange: val };
+          })
+        }
       />
 
       {/* Cook Range */}
@@ -226,12 +247,18 @@ export function Filter({ filterDataPromise, params }: FilterProps) {
         min={cookRange[0]}
         max={cookRange[1]}
         range={filter.cookRange ?? cookRange}
-        setRange={(val) => updateFilter({ ...filter, cookRange: val })}
+        setRange={(val) =>
+          setFilter((old) => {
+            updateURL({ ...old, cookRange: val });
+            return { ...old, cookRange: val };
+          })
+        }
       />
 
       <Button
         onClick={() => {
-          updateFilter({});
+          setFilter({});
+          updateURL({});
         }}
       >
         Reset All
