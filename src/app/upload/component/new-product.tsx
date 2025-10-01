@@ -43,7 +43,7 @@ const NewProduct = ({}: NewProductProps) => {
     if (state?.data) {
       setLoading(false);
       toast.success("Product created successfully");
-      return router.push(`/recipes`);
+      return router.push(`/recipies`);
     }
   }, [state?.fieldError, state?.formError, state?.data]);
   useEffect(() => {
