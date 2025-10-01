@@ -2,6 +2,7 @@ import { Bookmark, Search } from "lucide-react";
 import { Toggle } from "../theme/toggle";
 import Link from "next/link";
 import { SearchHeader } from "./search";
+import { Button } from "../ui/button";
 
 export function Header() {
   return (
@@ -21,9 +22,11 @@ export function Header() {
       <SearchHeader />
       <div className="flex gap-4 items-center">
         <Toggle />
-        <span className=" p-3 rounded-full border border-border">
-          <Bookmark className="w-4 h-4 " />
-        </span>
+        <Link href={"/upload"}>
+          <Button className=" p-6 py-3 rounded border border-border">
+            Upload
+          </Button>
+        </Link>
       </div>
     </header>
   );

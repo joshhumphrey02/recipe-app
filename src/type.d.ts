@@ -24,3 +24,9 @@ interface FilterItemsProps {
   cookRange?: number[];
   search?: string[];
 }
+
+interface ActionResponse<T> {
+  fieldError?: Partial<Record<keyof T, string | undefined>>;
+  formError?: string;
+  data?: boolean;
+}

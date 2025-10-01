@@ -1,6 +1,8 @@
 "use server";
 
 import prisma from "@/lib/prisma";
+import { ProductFormInput, ProductFormSchema } from "@/lib/validators/product";
+import { revalidatePath } from "next/cache";
 
 export async function getProducts(filters: FilterItemsProps = {}) {
   try {
@@ -151,3 +153,57 @@ export async function getRelatedProducts(cuisine: string) {
 }
 
 export type RelatedProducts = Awaited<ReturnType<typeof getRelatedProducts>>;
+
+export async function createProduct(
+  _: any,
+  data: ProductFormInput
+): Promise<ActionResponse<ProductFormInput>> {
+  try {
+    const parsed = ProductFormSchema.safeParse(data);
+    if (!parsed.success) {
+      const err = parsed.error.flatten();
+      return {
+        fieldError: {
+          name: err.fieldErrors.name?.[0],
+          cuisine: err.fieldErrors.cuisine?.[0],
+          tags: err.fieldErrors.tags?.[0],
+          ingredients: err.fieldErrors.ingredients?.[0],
+          instructions: err.fieldErrors.instructions?.[0],
+          difficulty: err.fieldErrors.difficulty?.[0],
+          images: err.fieldErrors.images?.[0],
+        },
+      };
+    }
+    const {
+      name,
+      cuisine,
+      ingredients,
+      instructions,
+      tags,
+      images,
+      difficulty,
+    } = data;
+    await prisma.$transaction(async (tx) => {
+      await tx.product.create({
+        data: {
+          name,
+          cuisine,
+          tags,
+          image: images[0].url,
+          difficulty,
+          ingredients,
+          instructions,
+        },
+      });
+    });
+    revalidatePath("/");
+    return {
+      data: true,
+    };
+  } catch (error) {
+    console.log(error);
+    return {
+      formError: "Error occurred",
+    };
+  }
+}
